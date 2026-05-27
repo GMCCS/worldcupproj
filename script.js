@@ -1934,7 +1934,7 @@ function convertToLisbonTime(match) {
   const d = new Date(lisbonMs);
   const h = d.getUTCHours().toString().padStart(2, "0");
   const m = d.getUTCMinutes().toString().padStart(2, "0");
-  const lisbonDate = new Intl.DateTimeFormat("en-US", {
+  const lisbonDate = new Intl.DateTimeFormat("pt-PT", {
     weekday: "short",
     month: "short",
     day: "numeric",
