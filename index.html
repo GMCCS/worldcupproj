@@ -164,6 +164,156 @@
       box-shadow: 0 0 20px var(--glow);
     }
 
+    /* Filters - Compact Dropdowns */
+    .filters-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .active-filters {
+      width: 100%;
+    }
+
+    #filterBadges {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+      padding: 0.4rem 0.9rem;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .filter-badge-close {
+      font-weight: 700;
+      margin-left: 0.25rem;
+      opacity: 0.8;
+    }
+
+    .filter-dropdown {
+      position: relative;
+    }
+
+    .filter-toggle {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 160px;
+      justify-content: space-between;
+    }
+
+    .filter-toggle:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .filter-toggle.active {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+
+    .dropdown-arrow {
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .filter-toggle.active .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-card);
+      border: 2px solid var(--accent-gold);
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      min-width: 200px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdown-menu.active {
+      display: block;
+      animation: slideDown 0.2s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .dropdown-item {
+      display: block;
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--accent-gold);
+      padding-left: 1.5rem;
+    }
+
+    .dropdown-item.active {
+      background: rgba(212, 175, 55, 0.2);
+      color: var(--accent-gold);
+      font-weight: 700;
+      border-left: 3px solid var(--accent-gold);
+      padding-left: 1.2rem;
+    }
+
     .tab-content {
       display: none;
     }
@@ -433,6 +583,10 @@
       overflow-y: auto;
     }
 
+    .team-details {
+      padding: 1rem;
+    }
+
     @keyframes slideUp {
       from {
         opacity: 0;
@@ -661,8 +815,12 @@
       }
 
       .modal-content {
-        padding: 1.5rem;
+        padding: 1.5rem 1.75rem;
         margin: 1rem;
+      }
+
+      .team-details {
+        padding: 1.5rem;
       }
 
       /* Stack teams vertically in modal on mobile */
@@ -828,6 +986,103 @@
       <button class="tab-btn" data-tab="groups">🌍 Groups</button>
       <button class="tab-btn" data-tab="standings">📊 Standings</button>
     </nav>
+
+    <!-- Filters Section - Compact Dropdowns -->
+    <div class="filters-container" id="filtersContainer">
+      <!-- Active Filters Display -->
+      <div class="active-filters" id="activeFilters" style="display: none; margin-bottom: 1rem; padding: 0.75rem 1rem; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px;">
+        <div style="font-size: 0.85rem; color: var(--accent-gold); margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Active Filters:</div>
+        <div id="filterBadges" style="display: flex; gap: 0.75rem; flex-wrap: wrap;"></div>
+      </div>
+
+      <div class="filter-dropdown">
+        <button class="filter-toggle" id="groupToggle">
+          <span>📊 Group</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-menu" id="groupMenu">
+          <button class="dropdown-item active" data-filter="all">All Groups</button>
+          <button class="dropdown-item" data-filter="A">Group A</button>
+          <button class="dropdown-item" data-filter="B">Group B</button>
+          <button class="dropdown-item" data-filter="C">Group C</button>
+          <button class="dropdown-item" data-filter="D">Group D</button>
+          <button class="dropdown-item" data-filter="E">Group E</button>
+          <button class="dropdown-item" data-filter="F">Group F</button>
+          <button class="dropdown-item" data-filter="G">Group G</button>
+          <button class="dropdown-item" data-filter="H">Group H 🇵🇹 (Portugal)</button>
+        </div>
+      </div>
+
+      <div class="filter-dropdown">
+        <button class="filter-toggle" id="dateToggle">
+          <span>📅 Date</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-menu" id="dateMenu">
+          <button class="dropdown-item active" data-filter-date="all">All Dates</button>
+          <button class="dropdown-item" data-filter-date="2026-06-11">Jun 11</button>
+          <button class="dropdown-item" data-filter-date="2026-06-12">Jun 12</button>
+          <button class="dropdown-item" data-filter-date="2026-06-13">Jun 13</button>
+          <button class="dropdown-item" data-filter-date="2026-06-14">Jun 14</button>
+          <button class="dropdown-item" data-filter-date="2026-06-15">Jun 15</button>
+          <button class="dropdown-item" data-filter-date="2026-06-16">Jun 16</button>
+          <button class="dropdown-item" data-filter-date="2026-06-17">Jun 17</button>
+          <button class="dropdown-item" data-filter-date="2026-06-18">Jun 18 🇵🇹</button>
+          <button class="dropdown-item" data-filter-date="2026-06-19">Jun 19</button>
+          <button class="dropdown-item" data-filter-date="2026-06-20">Jun 20</button>
+          <button class="dropdown-item" data-filter-date="2026-06-21">Jun 21</button>
+          <button class="dropdown-item" data-filter-date="2026-06-22">Jun 22</button>
+          <button class="dropdown-item" data-filter-date="2026-06-23">Jun 23 🇵🇹</button>
+          <button class="dropdown-item" data-filter-date="2026-06-24">Jun 24</button>
+          <button class="dropdown-item" data-filter-date="2026-06-25">Jun 25</button>
+          <button class="dropdown-item" data-filter-date="2026-06-26">Jun 26</button>
+          <button class="dropdown-item" data-filter-date="2026-06-27">Jun 27</button>
+          <button class="dropdown-item" data-filter-date="2026-06-28">Jun 28 🇵🇹</button>
+        </div>
+      </div>
+
+      <div class="filter-dropdown">
+        <button class="filter-toggle" id="countryToggle">
+          <span>🌍 Country</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-menu" id="countryMenu">
+          <button class="dropdown-item active" data-filter-country="all">All Countries</button>
+          <button class="dropdown-item" data-filter-country="POR">🇵🇹 Portugal (Your Team!)</button>
+          <button class="dropdown-item" data-filter-country="US">🇺🇸 USA</button>
+          <button class="dropdown-item" data-filter-country="MEX">🇲🇽 Mexico</button>
+          <button class="dropdown-item" data-filter-country="URU">🇺🇾 Uruguay</button>
+          <button class="dropdown-item" data-filter-country="CRC">🇨🇷 Costa Rica</button>
+          <button class="dropdown-item" data-filter-country="ARG">🇦🇷 Argentina</button>
+          <button class="dropdown-item" data-filter-country="NGA">🇳🇬 Nigeria</button>
+          <button class="dropdown-item" data-filter-country="SWE">🇸🇪 Sweden</button>
+          <button class="dropdown-item" data-filter-country="AUS">🇦🇺 Australia</button>
+          <button class="dropdown-item" data-filter-country="BRA">🇧🇷 Brazil</button>
+          <button class="dropdown-item" data-filter-country="SRB">🇷🇸 Serbia</button>
+          <button class="dropdown-item" data-filter-country="SUI">🇨🇭 Switzerland</button>
+          <button class="dropdown-item" data-filter-country="CMR">🇨🇲 Cameroon</button>
+          <button class="dropdown-item" data-filter-country="FRA">🇫🇷 France</button>
+          <button class="dropdown-item" data-filter-country="DEN">🇩🇰 Denmark</button>
+          <button class="dropdown-item" data-filter-country="TUN">🇹🇳 Tunisia</button>
+          <button class="dropdown-item" data-filter-country="PER">🇵🇪 Peru</button>
+          <button class="dropdown-item" data-filter-country="ESP">🇪🇸 Spain</button>
+          <button class="dropdown-item" data-filter-country="JPN">🇯🇵 Japan</button>
+          <button class="dropdown-item" data-filter-country="CRO">🇭🇷 Croatia</button>
+          <button class="dropdown-item" data-filter-country="MAR">🇲🇦 Morocco</button>
+          <button class="dropdown-item" data-filter-country="GER">🇩🇪 Germany</button>
+          <button class="dropdown-item" data-filter-country="NED">🇳🇱 Netherlands</button>
+          <button class="dropdown-item" data-filter-country="POL">🇵🇱 Poland</button>
+          <button class="dropdown-item" data-filter-country="CHI">🇨🇱 Chile</button>
+          <button class="dropdown-item" data-filter-country="ENG">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</button>
+          <button class="dropdown-item" data-filter-country="SEN">🇸🇳 Senegal</button>
+          <button class="dropdown-item" data-filter-country="KOR">🇰🇷 South Korea</button>
+          <button class="dropdown-item" data-filter-country="ECU">🇪🇨 Ecuador</button>
+          <button class="dropdown-item" data-filter-country="BEL">🇧🇪 Belgium</button>
+          <button class="dropdown-item" data-filter-country="COL">🇨🇴 Colombia</button>
+          <button class="dropdown-item" data-filter-country="GHA">🇬🇭 Ghana</button>
+        </div>
+      </div>
+    </div>
 
     <div id="schedule" class="tab-content active">
       <div class="matches-grid" id="scheduleMatches">
@@ -1274,23 +1529,69 @@
       },
 
       matches: [
-        // Times stored in local venue time, will be converted to Lisbon time
+        // Group A
         { home: 'US', away: 'MEX', date: '2026-06-11', time: '20:00', timezone: 'America/Mexico_City', venue: 'Azteca Stadium, Mexico City', status: 'upcoming', group: 'A' },
         { home: 'URU', away: 'CRC', date: '2026-06-11', time: '17:00', timezone: 'America/Los_Angeles', venue: 'SoFi Stadium, Los Angeles', status: 'upcoming', group: 'A' },
+        { home: 'MEX', away: 'URU', date: '2026-06-16', time: '22:00', timezone: 'America/Mexico_City', venue: 'Monterrey Stadium, Monterrey', status: 'upcoming', group: 'A' },
+        { home: 'CRC', away: 'US', date: '2026-06-16', time: '19:00', timezone: 'America/Los_Angeles', venue: 'Dignity Health Sports Park, Los Angeles', status: 'upcoming', group: 'A' },
+        { home: 'MEX', away: 'CRC', date: '2026-06-21', time: '21:00', timezone: 'America/Mexico_City', venue: 'Azteca Stadium, Mexico City', status: 'upcoming', group: 'A' },
+        { home: 'URU', away: 'US', date: '2026-06-21', time: '18:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'A' },
+        
+        // Group B
         { home: 'ARG', away: 'NGA', date: '2026-06-12', time: '19:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'B' },
         { home: 'SWE', away: 'AUS', date: '2026-06-12', time: '16:00', timezone: 'America/Chicago', venue: 'AT&T Stadium, Dallas', status: 'upcoming', group: 'B' },
+        { home: 'ARG', away: 'SWE', date: '2026-06-17', time: '19:00', timezone: 'America/New_York', venue: 'Lincoln Financial Field, Philadelphia', status: 'upcoming', group: 'B' },
+        { home: 'NGA', away: 'AUS', date: '2026-06-17', time: '16:00', timezone: 'America/Los_Angeles', venue: 'SoFi Stadium, Los Angeles', status: 'upcoming', group: 'B' },
+        { home: 'NGA', away: 'SWE', date: '2026-06-22', time: '22:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'B' },
+        { home: 'AUS', away: 'ARG', date: '2026-06-22', time: '19:00', timezone: 'America/New_York', venue: 'Mercedes-Benz Stadium, Atlanta', status: 'upcoming', group: 'B' },
+        
+        // Group C
         { home: 'BRA', away: 'SRB', date: '2026-06-13', time: '21:00', timezone: 'America/Los_Angeles', venue: 'Rose Bowl, Los Angeles', status: 'upcoming', group: 'C' },
         { home: 'SUI', away: 'CMR', date: '2026-06-13', time: '18:00', timezone: 'America/Los_Angeles', venue: 'Levi\'s Stadium, San Francisco', status: 'upcoming', group: 'C' },
+        { home: 'BRA', away: 'SUI', date: '2026-06-18', time: '21:00', timezone: 'America/New_York', venue: 'Hard Rock Stadium, Miami', status: 'upcoming', group: 'C' },
+        { home: 'CMR', away: 'SRB', date: '2026-06-18', time: '18:00', timezone: 'America/Chicago', venue: 'NRG Stadium, Houston', status: 'upcoming', group: 'C' },
+        { home: 'CMR', away: 'BRA', date: '2026-06-23', time: '22:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'C' },
+        { home: 'SRB', away: 'SUI', date: '2026-06-23', time: '19:00', timezone: 'America/Los_Angeles', venue: 'Levi\'s Stadium, San Francisco', status: 'upcoming', group: 'C' },
+        
+        // Group D
         { home: 'FRA', away: 'DEN', date: '2026-06-14', time: '20:00', timezone: 'America/New_York', venue: 'Mercedes-Benz Stadium, Atlanta', status: 'upcoming', group: 'D' },
         { home: 'TUN', away: 'PER', date: '2026-06-14', time: '17:00', timezone: 'America/New_York', venue: 'Hard Rock Stadium, Miami', status: 'upcoming', group: 'D' },
+        { home: 'FRA', away: 'PER', date: '2026-06-19', time: '19:00', timezone: 'America/New_York', venue: 'Lincoln Financial Field, Philadelphia', status: 'upcoming', group: 'D' },
+        { home: 'DEN', away: 'TUN', date: '2026-06-19', time: '16:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'D' },
+        { home: 'DEN', away: 'PER', date: '2026-06-24', time: '22:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'D' },
+        { home: 'TUN', away: 'FRA', date: '2026-06-24', time: '19:00', timezone: 'America/New_York', venue: 'Hard Rock Stadium, Miami', status: 'upcoming', group: 'D' },
+        
+        // Group E
         { home: 'ESP', away: 'JPN', date: '2026-06-15', time: '19:00', timezone: 'America/New_York', venue: 'Lincoln Financial Field, Philadelphia', status: 'upcoming', group: 'E' },
         { home: 'CRO', away: 'MAR', date: '2026-06-15', time: '16:00', timezone: 'America/New_York', venue: 'Gillette Stadium, Boston', status: 'upcoming', group: 'E' },
+        { home: 'ESP', away: 'CRO', date: '2026-06-20', time: '21:00', timezone: 'America/New_York', venue: 'Mercedes-Benz Stadium, Atlanta', status: 'upcoming', group: 'E' },
+        { home: 'JPN', away: 'MAR', date: '2026-06-20', time: '18:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'E' },
+        { home: 'JPN', away: 'CRO', date: '2026-06-25', time: '22:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'E' },
+        { home: 'MAR', away: 'ESP', date: '2026-06-25', time: '19:00', timezone: 'America/New_York', venue: 'Gillette Stadium, Boston', status: 'upcoming', group: 'E' },
+        
+        // Group F
         { home: 'GER', away: 'NED', date: '2026-06-16', time: '21:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'F' },
         { home: 'POL', away: 'CHI', date: '2026-06-16', time: '18:00', timezone: 'America/Toronto', venue: 'BMO Field, Toronto', status: 'upcoming', group: 'F' },
+        { home: 'GER', away: 'CHI', date: '2026-06-21', time: '19:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'F' },
+        { home: 'NED', away: 'POL', date: '2026-06-21', time: '16:00', timezone: 'America/Los_Angeles', venue: 'SoFi Stadium, Los Angeles', status: 'upcoming', group: 'F' },
+        { home: 'NED', away: 'CHI', date: '2026-06-26', time: '22:00', timezone: 'America/Toronto', venue: 'BMO Field, Toronto', status: 'upcoming', group: 'F' },
+        { home: 'POL', away: 'GER', date: '2026-06-26', time: '19:00', timezone: 'America/New_York', venue: 'MetLife Stadium, New York', status: 'upcoming', group: 'F' },
+        
+        // Group G
         { home: 'ENG', away: 'SEN', date: '2026-06-17', time: '20:00', timezone: 'America/Los_Angeles', venue: 'Lumen Field, Seattle', status: 'upcoming', group: 'G' },
         { home: 'KOR', away: 'ECU', date: '2026-06-17', time: '17:00', timezone: 'America/Vancouver', venue: 'BC Place, Vancouver', status: 'upcoming', group: 'G' },
+        { home: 'ENG', away: 'ECU', date: '2026-06-22', time: '19:00', timezone: 'America/Vancouver', venue: 'BC Place, Vancouver', status: 'upcoming', group: 'G' },
+        { home: 'SEN', away: 'KOR', date: '2026-06-22', time: '16:00', timezone: 'America/Los_Angeles', venue: 'Lumen Field, Seattle', status: 'upcoming', group: 'G' },
+        { home: 'SEN', away: 'ECU', date: '2026-06-27', time: '22:00', timezone: 'America/Los_Angeles', venue: 'Lumen Field, Seattle', status: 'upcoming', group: 'G' },
+        { home: 'KOR', away: 'ENG', date: '2026-06-27', time: '19:00', timezone: 'America/Vancouver', venue: 'BC Place, Vancouver', status: 'upcoming', group: 'G' },
+        
+        // Group H (Portugal!)
         { home: 'POR', away: 'BEL', date: '2026-06-18', time: '19:00', timezone: 'America/Chicago', venue: 'NRG Stadium, Houston', status: 'upcoming', group: 'H' },
-        { home: 'COL', away: 'GHA', date: '2026-06-18', time: '16:00', timezone: 'America/Monterrey', venue: 'Estadio BBVA, Monterrey', status: 'upcoming', group: 'H' }
+        { home: 'COL', away: 'GHA', date: '2026-06-18', time: '16:00', timezone: 'America/Monterrey', venue: 'Estadio BBVA, Monterrey', status: 'upcoming', group: 'H' },
+        { home: 'POR', away: 'GHA', date: '2026-06-23', time: '19:00', timezone: 'America/New_York', venue: 'Hard Rock Stadium, Miami', status: 'upcoming', group: 'H' },
+        { home: 'BEL', away: 'COL', date: '2026-06-23', time: '16:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'H' },
+        { home: 'BEL', away: 'GHA', date: '2026-06-28', time: '22:00', timezone: 'America/Chicago', venue: 'Arrowhead Stadium, Kansas City', status: 'upcoming', group: 'H' },
+        { home: 'COL', away: 'POR', date: '2026-06-28', time: '19:00', timezone: 'America/Monterrey', venue: 'Estadio BBVA, Monterrey', status: 'upcoming', group: 'H' }
       ]
     };
 
@@ -1303,18 +1604,99 @@
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
         
+        // Show/hide filters based on tab
+        const filtersContainer = document.getElementById('filtersContainer');
+        if (btn.dataset.tab === 'schedule') {
+          filtersContainer.style.display = 'block';
+        } else {
+          filtersContainer.style.display = 'none';
+        }
+        
         if (btn.dataset.tab === 'groups') renderGroups();
         if (btn.dataset.tab === 'standings') renderStandings();
       });
     });
 
-    // Render matches
+    // Global filter state
+    let currentGroupFilter = 'all';
+    let currentDateFilter = 'all';
+    let currentCountryFilter = 'all';
+
+    // Update active filter badges
+    function updateFilterBadges() {
+      const badgesContainer = document.getElementById('filterBadges');
+      const filtersDisplay = document.getElementById('activeFilters');
+      const badges = [];
+
+      if (currentGroupFilter !== 'all') {
+        badges.push(`<div class="filter-badge" onclick="clearGroupFilter()">📊 Group ${currentGroupFilter} <span class="filter-badge-close">✕</span></div>`);
+      }
+
+      if (currentDateFilter !== 'all') {
+        const dateObj = new Date(currentDateFilter);
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        badges.push(`<div class="filter-badge" onclick="clearDateFilter()">📅 ${dateStr} <span class="filter-badge-close">✕</span></div>`);
+      }
+
+      if (currentCountryFilter !== 'all') {
+        const team = findTeam(currentCountryFilter);
+        badges.push(`<div class="filter-badge" onclick="clearCountryFilter()">${team.flag} ${team.name} <span class="filter-badge-close">✕</span></div>`);
+      }
+
+      badgesContainer.innerHTML = badges.join('');
+      filtersDisplay.style.display = badges.length > 0 ? 'block' : 'none';
+    }
+
+    // Clear individual filters
+    function clearGroupFilter() {
+      currentGroupFilter = 'all';
+      document.querySelectorAll('#groupMenu [data-filter]').forEach(b => b.classList.remove('active'));
+      document.querySelector('#groupMenu [data-filter="all"]').classList.add('active');
+      updateFilterBadges();
+      renderMatches('scheduleMatches');
+      renderMatches('liveMatches', 'live');
+    }
+
+    function clearDateFilter() {
+      currentDateFilter = 'all';
+      document.querySelectorAll('#dateMenu [data-filter-date]').forEach(b => b.classList.remove('active'));
+      document.querySelector('#dateMenu [data-filter-date="all"]').classList.add('active');
+      updateFilterBadges();
+      renderMatches('scheduleMatches');
+      renderMatches('liveMatches', 'live');
+    }
+
+    function clearCountryFilter() {
+      currentCountryFilter = 'all';
+      document.querySelectorAll('#countryMenu [data-filter-country]').forEach(b => b.classList.remove('active'));
+      document.querySelector('#countryMenu [data-filter-country="all"]').classList.add('active');
+      updateFilterBadges();
+      renderMatches('scheduleMatches');
+      renderMatches('liveMatches', 'live');
+    }
+
+    // Render matches with filtering
     function renderMatches(containerId, filter = null) {
       const container = document.getElementById(containerId);
       let matches = worldCupData.matches;
       
       if (filter === 'live') {
         matches = matches.filter(m => m.status === 'live');
+      }
+      
+      // Apply group filter
+      if (currentGroupFilter !== 'all') {
+        matches = matches.filter(m => m.group === currentGroupFilter);
+      }
+      
+      // Apply date filter
+      if (currentDateFilter !== 'all') {
+        matches = matches.filter(m => m.date === currentDateFilter);
+      }
+      
+      // Apply country filter
+      if (currentCountryFilter !== 'all') {
+        matches = matches.filter(m => m.home === currentCountryFilter || m.away === currentCountryFilter);
       }
       
       // Sort: Portugal matches first, then by date
@@ -1329,7 +1711,7 @@
       });
       
       if (matches.length === 0) {
-        container.innerHTML = '<div class="loading"><p>No matches to display</p></div>';
+        container.innerHTML = '<div class="loading"><p>No matches for selected filters</p></div>';
         return;
       }
       
@@ -1340,7 +1722,7 @@
         const isPortugalMatch = match.home === 'POR' || match.away === 'POR';
         
         return `
-          <div class="match-card ${isPortugalMatch ? 'portugal-match' : ''}" onclick="showMatchDetails('${match.home}', '${match.away}')">
+          <div class="match-card ${isPortugalMatch ? 'portugal-match' : ''}" onclick="showMatchDetails('${match.home}', '${match.away}')" role="button" tabindex="0" aria-label="${homeTeam.name} vs ${awayTeam.name}, ${lisbonTime.date} at ${lisbonTime.time} (Lisbon time), ${match.venue}">
             <div class="match-header">
               <span class="match-status status-${match.status}">
                 ${match.status === 'live' ? 'LIVE' : match.status === 'finished' ? 'FINISHED' : 'UPCOMING'}
@@ -1382,7 +1764,7 @@
               </div>
               <div class="match-venue">
                 <span>📍</span>
-                <span>${match.venue.split(',')[0]}</span>
+                <span title="${match.venue}">${match.venue}</span>
               </div>
             </div>
           </div>
@@ -1394,15 +1776,18 @@
     function renderGroups() {
       const container = document.getElementById('groupsContainer');
       container.innerHTML = Object.entries(worldCupData.groups).map(([group, teams]) => `
-        <div class="group-card">
-          <h3 class="group-title">Group ${group}</h3>
+        <div class="group-card" ${group === 'H' ? 'style="border: 2px solid var(--accent-gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);"' : ''}>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <h3 class="group-title" style="margin: 0;">Group ${group}</h3>
+            ${group === 'H' ? '<span style="background: var(--accent-gold); color: var(--bg-primary); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">🇵🇹 Your Group</span>' : ''}
+          </div>
           <ul class="team-list">
             ${teams.map((team, index) => `
-              <li class="team-item" onclick="showCountryInfo('${team.code}')">
-                <span class="team-rank">#${index + 1}</span>
+              <li class="team-item" onclick="showCountryInfo('${team.code}')" role="button" tabindex="0" aria-label="${team.name}, FIFA Ranking #${team.rank}">
+                <span class="team-rank">${index + 1}</span>
                 <span class="team-flag-small">${team.flag}</span>
                 <span>${team.name}</span>
-                <span class="team-stats">FIFA: ${team.rank}</span>
+                <span class="team-stats">FIFA #${team.rank}</span>
               </li>
             `).join('')}
           </ul>
@@ -1648,20 +2033,84 @@
     renderMatches('scheduleMatches');
     renderMatches('liveMatches', 'live');
     
-    // Simulate live updates every 30 seconds
-    setInterval(() => {
-      // Randomly update a match to "live" status
-      const upcomingMatches = worldCupData.matches.filter(m => m.status === 'upcoming');
-      if (upcomingMatches.length > 0 && Math.random() > 0.7) {
-        const randomMatch = upcomingMatches[Math.floor(Math.random() * upcomingMatches.length)];
-        randomMatch.status = 'live';
-        randomMatch.homeScore = Math.floor(Math.random() * 4);
-        randomMatch.awayScore = Math.floor(Math.random() * 4);
-        
+    // Dropdown toggle functionality
+    document.getElementById('groupToggle').addEventListener('click', () => {
+      const menu = document.getElementById('groupMenu');
+      menu.classList.toggle('active');
+      document.getElementById('groupToggle').classList.toggle('active');
+      document.getElementById('dateToggle').classList.remove('active');
+      document.getElementById('countryToggle').classList.remove('active');
+      document.getElementById('dateMenu').classList.remove('active');
+      document.getElementById('countryMenu').classList.remove('active');
+    });
+
+    document.getElementById('dateToggle').addEventListener('click', () => {
+      const menu = document.getElementById('dateMenu');
+      menu.classList.toggle('active');
+      document.getElementById('dateToggle').classList.toggle('active');
+      document.getElementById('groupToggle').classList.remove('active');
+      document.getElementById('countryToggle').classList.remove('active');
+      document.getElementById('groupMenu').classList.remove('active');
+      document.getElementById('countryMenu').classList.remove('active');
+    });
+
+    document.getElementById('countryToggle').addEventListener('click', () => {
+      const menu = document.getElementById('countryMenu');
+      menu.classList.toggle('active');
+      document.getElementById('countryToggle').classList.toggle('active');
+      document.getElementById('groupToggle').classList.remove('active');
+      document.getElementById('dateToggle').classList.remove('active');
+      document.getElementById('groupMenu').classList.remove('active');
+      document.getElementById('dateMenu').classList.remove('active');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.filter-dropdown')) {
+        document.getElementById('groupMenu').classList.remove('active');
+        document.getElementById('dateMenu').classList.remove('active');
+        document.getElementById('countryMenu').classList.remove('active');
+        document.getElementById('groupToggle').classList.remove('active');
+        document.getElementById('dateToggle').classList.remove('active');
+        document.getElementById('countryToggle').classList.remove('active');
+      }
+    });
+
+    // Group filter event listeners
+    document.querySelectorAll('#groupMenu [data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#groupMenu [data-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentGroupFilter = btn.dataset.filter;
+        updateFilterBadges();
         renderMatches('scheduleMatches');
         renderMatches('liveMatches', 'live');
-      }
-    }, 30000);
+      });
+    });
+
+    // Date filter event listeners
+    document.querySelectorAll('#dateMenu [data-filter-date]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#dateMenu [data-filter-date]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentDateFilter = btn.dataset.filterDate;
+        updateFilterBadges();
+        renderMatches('scheduleMatches');
+        renderMatches('liveMatches', 'live');
+      });
+    });
+
+    // Country filter event listeners
+    document.querySelectorAll('#countryMenu [data-filter-country]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#countryMenu [data-filter-country]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCountryFilter = btn.dataset.filterCountry;
+        updateFilterBadges();
+        renderMatches('scheduleMatches');
+        renderMatches('liveMatches', 'live');
+      });
+    });
   </script>
 </body>
 </html>
